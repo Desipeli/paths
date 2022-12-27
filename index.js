@@ -1,7 +1,6 @@
-import NodeValues from "./resources.js"
-import { map, setAnimationDelay} from "./resources.js"
-import { initGrid, cursorCanvas,  } from "./canvas.js"
-import initKDMaze from "./KoreDessuMaze.js"
+import { map, setAnimationDelay} from "/resources.js"
+import { initGrid, cursorCanvas,  } from "/canvas.js"
+import initKDMaze from "/KoreDessuMaze.js"
 
 
 
@@ -10,6 +9,7 @@ const initProgram = () => {
     cursorCanvas()
 
     listeners()
+    
 }
 
 const listeners = () => {
