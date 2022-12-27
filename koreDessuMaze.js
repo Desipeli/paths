@@ -1,6 +1,6 @@
-import NodeValues from "/resources.js"
-import { map, fillMapWith, randomElementFromArray, randomInt, delay, animDelay} from "/resources.js"
-import { drawCell, drawGrid } from "/canvas.js"
+import NodeValues from "resources.js"
+import { map, fillMapWith, randomElementFromArray, randomInt, delay, animDelay} from "resources.js"
+import { drawCell, drawGrid } from "canvas.js"
 
 
 const initKDMaze = () => {
