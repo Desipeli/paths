@@ -22,17 +22,20 @@ const listeners = () => {
         }
     })
 
+
+    const isCycles = document.getElementById('cycles')
+    const probability = document.getElementById('cycles-p')
     const btnNewKoDeMaze = document.getElementById('btn-new-kode')
     btnNewKoDeMaze.addEventListener('click', () => {
+        let value = map.length
         if (map.length % 2 == 0) {
-            alert("Grid size must be uneven")
-            return
+            value += 1
         }
-        let answer = confirm(`Do you want to create new ${map.length} x ${map.length} maze? Current map will be deleted`)
+        let answer = confirm(`Do you want to create new ${value} x ${value} maze? Current map will be deleted`)
         if (answer) {
-            initKDMaze()
-
-            
+            console.log(isCycles.checked)
+            initGrid(value)
+            initKDMaze(isCycles.checked, Math.max(Math.min(100, probability.value), 0))
         }
     })
 
