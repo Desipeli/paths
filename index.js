@@ -1,7 +1,6 @@
 import { map, setAnimationDelay} from "./resources.js"
 import { initGrid, cursorCanvas,  } from "./canvas.js"
-import initKDMaze from "./koreDessuMaze.js"
-
+import initKDMaze from "./koreDessuMaze.js" // Does this update??
 
 
 const initProgram = () => {
