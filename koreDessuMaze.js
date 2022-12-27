@@ -7,7 +7,7 @@ let cycleProbability = 0 // 0-1
 
 const initKDMaze = (isCycles = false, probability = 0) => {
     cycles = isCycles
-    cycleProbability = probability / 100
+    cycleProbability = probability
 
     if (map.length % 2 == 0) return null
     const spawns = []
@@ -54,15 +54,12 @@ const drill = async (node, direction, spawns) => {
             nextEmpty = true
             break
         }
-
         i++
     }
-
 
     let distance = randomInt(1, i-1)
     if (cycles && nextEmpty && Math.random() < cycleProbability) distance = i
     
-
     for (let j = 1; j <= distance * 2; j++) {
         let newX = node.x + direction.x * j
         let newY = node.y + direction.y * j

@@ -35,7 +35,7 @@ const listeners = () => {
         if (answer) {
             console.log(isCycles.checked)
             initGrid(value)
-            initKDMaze(isCycles.checked, Math.max(Math.min(100, probability.value), 0))
+            initKDMaze(isCycles.checked, Math.max(Math.min(100, probability.value), 0) / 100)
         }
     })
 
