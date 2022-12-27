@@ -1,5 +1,5 @@
 import NodeValues from "./resources.js"
-import { canvas, ctx, map } from "./resources.js"
+import { canvas, ctx, map, cellColors } from "./resources.js"
 
 let cellSize = 0
 let cellsPerRow = 0
@@ -40,7 +40,7 @@ export const drawGrid = () => {
         ctx.moveTo(0,ctx.lineWidth/2 + i * cellSize) // rivi vase
         ctx.lineTo(canvas.height, ctx.lineWidth/2 + i * cellSize ) // rivi oikea
     }
-    ctx.strokeStyle = "grey"
+    ctx.strokeStyle = cellColors.GRID
     ctx.stroke()
     drawMap()
 }
@@ -58,13 +58,13 @@ export const drawMap = () => {
 export const drawCell = (pos) => {
     // Piirrä yksittäinen solu
     if (map[pos.y][pos.x] == NodeValues.EMPTY) {
-        ctx.fillStyle = 'green'
+        ctx.fillStyle = cellColors.EMPTY
     } else if (map[pos.y][pos.x] == NodeValues.BLOCKED) {
-        ctx.fillStyle = 'black'
+        ctx.fillStyle = cellColors.BLOCKED
     } else if (map[pos.y][pos.x] == NodeValues.START) {
-        ctx.fillStyle = 'blue'
+        ctx.fillStyle = cellColors.START
     } else if (map[pos.y][pos.x] == NodeValues.END) {
-        ctx.fillStyle = 'pink'
+        ctx.fillStyle = cellColors.END
     }
     ctx.fillRect(pos.x * cellSize + lineWidth, pos.y * cellSize + lineWidth, cellSize - lineWidth, cellSize- lineWidth)
 }

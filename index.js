@@ -4,7 +4,7 @@ import initKDMaze from "./koreDessuMaze.js" // Does this update??
 
 
 const initProgram = () => {
-    initGrid(10)
+    initGrid(21)
     cursorCanvas()
 
     listeners()

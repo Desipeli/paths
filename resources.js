@@ -6,6 +6,15 @@ const NodeValues = {
     END: "E"
 }
 
+export const cellColors = {
+    EMPTY: 'rgb(69,146,64)',
+    BLOCKED: 'rgb(11, 11, 11)',
+    VISITED: 'white',
+    START: 'blue',
+    END: 'pink',
+    GRID: 'rgb(32, 32, 32)'
+}
+
 export const findNode = (what) => {
     for (let row = 0; row < map.length; row++) {
         for (let col = 0; col < map.length; col++) {

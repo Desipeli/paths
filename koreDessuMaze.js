@@ -7,10 +7,19 @@ const initKDMaze = () => {
     if (map.length % 2 == 0) return null
     const spawns = []
     fillMapWith(NodeValues.BLOCKED)
-    map[1][1] = NodeValues.EMPTY
+    const startPos = randomStart()
+    map[startPos.y][startPos.x] = NodeValues.EMPTY
     drawGrid()
-    spawns.push({x: 1, y: 1})
+    spawns.push(startPos)
     start(spawns)
+}
+
+const randomStart = () => {
+    let startY = randomInt(0, map.length - 3)
+    let startX = randomInt(0, map.length - 3)
+    if (startX % 2 == 0) startX += 1
+    if (startY % 2 == 0) startY += 1
+    return {x: startX, y: startY}
 }
 
 const start = async (spawns,) => {
