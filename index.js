@@ -31,6 +31,8 @@ const listeners = () => {
         let answer = confirm(`Do you want to create new ${map.length} x ${map.length} maze? Current map will be deleted`)
         if (answer) {
             initKDMaze()
+
+            
         }
     })
 
@@ -43,3 +45,12 @@ const listeners = () => {
 
 
 export default initProgram
+
+
+// Ehkä joskus 
+// let opened = window.open("")
+// opened.document.write('[')
+// for (let i= 0; i < map.length; i++) {
+//     opened.document.write(`[${map[i]}],`)
+//     }
+// opened.document.write(']')
