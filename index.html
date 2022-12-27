@@ -7,21 +7,24 @@
     </title>
   </head>
   <body>
-    <canvas id="canvas" min-width="100" min-height="100" width="1000" height="1000"></canvas>
-    <div id="div-options">
-      <div>
-        <label for="grid-size">grid size:</label>
-        <input id="grid-size" type="number" min="1" max="300" step="1">
-        <button id="btn-new-grid">Create new grid</button>
-      </div>
-      <div>
-        <button id="btn-new-kode">Create new maze</button>
-      </div>
-      <div>
-        <label for="animation-delay">animation delay (ms)</label>
-        <input id="animation-delay" type="number" value="100">
+    <div id="wrapper">
+      <canvas id="canvas" min-width="100" min-height="100" width="1000" height="1000"></canvas>
+      <div id="div-options">
+        <div>
+          <label for="grid-size">grid size:</label>
+          <input id="grid-size" type="number" min="1" max="300" step="1">
+          <button id="btn-new-grid">Create new grid</button>
+        </div>
+        <div>
+          <button id="btn-new-kode">Create new maze</button>
+        </div>
+        <div>
+          <label for="animation-delay">animation delay (ms)</label>
+          <input id="animation-delay" type="number" value="100">
+        </div>
       </div>
     </div>
+    
     <script type="module">
       import initProgram from './index.js'
       window.onload = () => {
@@ -29,6 +32,15 @@
         initProgram()
       }
     </script>
+    <style>
+      @media (min-width: 1600px) {
+        #wrapper {
+        display: inline-flex;
+        }
+      }
+      
+
+    </style>
   </body>
 
 </html>
