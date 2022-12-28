@@ -1,13 +1,15 @@
-import NodeValues from "./resources.js"
+import NodeValues, { findNode } from "./resources.js"
 import { canvas, ctx, map, cellColors } from "./resources.js"
 
 let cellSize = 0
 let cellsPerRow = 0
-let lineWidth = 1.5
+let lineWidth = 1
 
-let mouseDown = 0
+let mouseDown = []
 let previousMousePosGrid = {x: null, y: null}
 let painting = null
+
+let rightClickPlace = NodeValues.START
 
 export const initGrid = (size = 50) => {
     // Alustetaan kartta ja arvot pojan piirtämistä varten
@@ -20,7 +22,13 @@ export const initGrid = (size = 50) => {
             }
             map.push(row)
         }
+
+    ctx.canvas.height = Math.min(window.innerWidth - 15, window.innerHeight - 15)
+    ctx.canvas.width = canvas.height
+    ctx.lineWidth = lineWidth
+    cellSize = (canvas.height / cellsPerRow) - ctx.lineWidth / cellsPerRow
     drawGrid()
+    drawMap()
 }
 
 export const drawGrid = () => {
@@ -42,7 +50,7 @@ export const drawGrid = () => {
     }
     ctx.strokeStyle = cellColors.GRID
     ctx.stroke()
-    drawMap()
+    //drawMap()
 }
 
 export const drawMap = () => {
@@ -65,6 +73,8 @@ export const drawCell = (pos) => {
         ctx.fillStyle = cellColors.START
     } else if (map[pos.y][pos.x] == NodeValues.END) {
         ctx.fillStyle = cellColors.END
+    } else if (map[pos.y][pos.x] == NodeValues.VISITED) {
+        ctx.fillStyle = cellColors.VISITED
     }
     ctx.fillRect(pos.x * cellSize + lineWidth, pos.y * cellSize + lineWidth, cellSize - lineWidth, cellSize- lineWidth)
 }
@@ -91,35 +101,47 @@ export const getMousePosGrid = (event) => {
 export const cursorCanvas = () => {
     // kursori ja canvas
     canvas.addEventListener('mousedown', (event) => {
-        mouseDown++
+        mouseDown.push(event)
         let pos = getMousePosCanvas(event)
         pos = getMousePosGrid(event)
-        drawGrid(localStorage.getItem('rectPerRow'))
-        paintGrid(event, pos)
+        if (event.button == 0) {
+            paintGrid(event, pos)
+        } else if (event.button == 2) {
+            placeStartEnd(event, pos)
+        }
+        
     })
 
     canvas.addEventListener('mouseup', (event) => {
-        mouseDown = 0
+        mouseDown.length = 0
         previousMousePosGrid = {x: null, y: null}
         painting = null
+        drawGrid()
+        drawMap()
     })
 
     canvas.addEventListener('mousemove', (event) => {
         let pos = getMousePosGrid(event)
-        paintGrid(event, pos)
+        mouseDown.forEach(e => {
+            if (e.button != 0) {
+                return
+            } else {
+                paintGrid(event, pos)
+            }
+        })
     })
 }
 
 
 const paintGrid = (event, location) => {
     // Maalataan karttaa
-    if (mouseDown <= 0 ) return
+    if (mouseDown.length <= 0 ) return
     if (previousMousePosGrid.x == location.x & previousMousePosGrid.y == location.y) return
     previousMousePosGrid = location
-    
+
     const value = map[location.y][location.x]
     if (painting == null) { // Valitaan mitä maalataan
-        if (value == NodeValues.BLOCKED) {
+        if (value != NodeValues.EMPTY) {
             painting = NodeValues.EMPTY
         } else if (value == NodeValues.EMPTY) {
             painting = NodeValues.BLOCKED
@@ -133,7 +155,26 @@ const paintGrid = (event, location) => {
     drawCell(location)
 }
 
+const placeStartEnd = (event, location) => {
+    if (map[location.y][location.x] == NodeValues.START || map[location.y][location.x] == NodeValues.END) {
+        map[location.y][location.x] = NodeValues.EMPTY
+        drawCell(location)
+        return
+    }
+    if (findNode(NodeValues.START)) {
+        if (findNode(NodeValues.END)) {
+            return
+        } else {
+            map[location.y][location.x] = NodeValues.END
+        }
+    } else {
+        map[location.y][location.x] = NodeValues.START
+    }
+    drawCell(location)
+}
+
 window.onresize = () => {
     // Piirretään uudestaan aina kun ikkunan koko muuttuu
     drawGrid()
+    drawMap()
 }
