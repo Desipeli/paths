@@ -75,6 +75,8 @@ export const drawCell = (pos) => {
         ctx.fillStyle = cellColors.END
     } else if (map[pos.y][pos.x] == NodeValues.VISITED) {
         ctx.fillStyle = cellColors.VISITED
+    } else if (map[pos.y][pos.x] == NodeValues.ROUTE) {
+        ctx.fillStyle = cellColors.ROUTE
     }
     ctx.fillRect(pos.x * cellSize + lineWidth, pos.y * cellSize + lineWidth, cellSize - lineWidth, cellSize- lineWidth)
 }

@@ -3,7 +3,8 @@ const NodeValues = {
     BLOCKED: "X",
     VISITED: "V",
     START: "S",
-    END: "E"
+    END: "E",
+    ROUTE: "R"
 }
 
 export const cellColors = {
@@ -12,7 +13,8 @@ export const cellColors = {
     VISITED: 'white',
     START: 'blue',
     END: 'pink',
-    GRID: 'rgb(32, 32, 32)'
+    ROUTE: 'yellow',
+    GRID: 'rgb(32, 32, 32)',
 }
 
 export const findNode = (what) => {
@@ -39,6 +41,14 @@ export const fillMapWith = (value) => {
         for (let col = 0; col < map.length; col++) {
             if (map[row][col] == NodeValues.START || map[row][col] == NodeValues.END) continue
             map[row][col] = value
+        }
+    }
+}
+
+export const replaceCellsWith = (replace, value) => {
+    for (let row = 0; row < map.length; row++) {
+        for (let col = 0; col < map.length; col++) {
+            if (map[row][col] == replace) map[row][col] = value
         }
     }
 }
