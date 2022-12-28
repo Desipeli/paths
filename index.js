@@ -10,7 +10,7 @@ const initProgram = () => {
     cursorCanvas()
 
     listeners()
-    //initBreadth()
+    //
 }
 
 const listeners = () => {
@@ -24,6 +24,20 @@ const listeners = () => {
         }
     })
 
+    const btnBreadth = document.getElementById('btn-breadth')
+    btnBreadth.addEventListener('click', () => {
+        let startPos = findNode(NodeValues.START)
+        if (!startPos) {
+            alert("Place starting position (blue) with right click")
+            return
+        }
+        let endPos = findNode(NodeValues.END)
+        if (!endPos) {
+            alert("Place destination (pink) with right click")
+            return
+        }
+        initBreadth(startPos, endPos)
+    })
 
     const isCycles = document.getElementById('cycles')
     const probability = document.getElementById('cycles-p')
