@@ -23,6 +23,7 @@ export const findNode = (what) => {
             }
         }
     }
+    return null
 }
 
 export const randomElementFromArray = (array) => {
@@ -36,6 +37,7 @@ export const randomInt = (min, max) => {
 export const fillMapWith = (value) => {
     for (let row = 0; row < map.length; row++) {
         for (let col = 0; col < map.length; col++) {
+            if (map[row][col] == NodeValues.START || map[row][col] == NodeValues.END) continue
             map[row][col] = value
         }
     }
