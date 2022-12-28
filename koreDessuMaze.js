@@ -1,20 +1,21 @@
-import NodeValues from "./resources.js"
+import NodeValues, { findNode } from "./resources.js"
 import { map, fillMapWith, randomElementFromArray, randomInt, delay, animDelay} from "./resources.js"
-import { drawCell, drawGrid } from "./canvas.js"
+import { drawCell, drawGrid, drawMap } from "./canvas.js"
 
 let cycles = false
 let cycleProbability = 0 // 0-1
 
-const initKDMaze = (isCycles = false, probability = 0) => {
+const initKDMaze = (isCycles = false, probability = 0, startPos) => {
     cycles = isCycles
     cycleProbability = probability
 
     if (map.length % 2 == 0) return null
     const spawns = []
     fillMapWith(NodeValues.BLOCKED)
-    const startPos = randomStart()
+    if (!startPos) startPos = randomStart()
     map[startPos.y][startPos.x] = NodeValues.EMPTY
     drawGrid()
+    drawMap()
     spawns.push(startPos)
     start(spawns)
 }
