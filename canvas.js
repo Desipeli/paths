@@ -1,5 +1,5 @@
-import NodeValues, { findNode } from "./resources.js"
-import { canvas, ctx, map, cellColors } from "./resources.js"
+import NodeValues, { findNode, isGrid, isLight } from "./resources.js"
+import { canvas, ctx, map, cellColorsLight, cellColorsDark } from "./resources.js"
 
 let cellSize = 0
 let cellsPerRow = 0
@@ -27,33 +27,42 @@ export const initGrid = (size = 50) => {
     ctx.canvas.width = canvas.height
     ctx.lineWidth = lineWidth
     cellSize = (canvas.height / cellsPerRow) - ctx.lineWidth / cellsPerRow
-    drawGrid()
     drawMap()
 }
 
-export const drawGrid = () => {
-    // Piirretään pohjas
+// export const drawGrid = () => {
+//     return
+//     // Piirretään pohjas
+//     ctx.canvas.height = Math.min(window.innerWidth - 15, window.innerHeight - 15)
+//     ctx.canvas.width = canvas.height
+//     ctx.lineWidth = lineWidth
+//     cellSize = (canvas.height / cellsPerRow) - ctx.lineWidth / cellsPerRow
+
+//     // sarakkeet
+//     for (let i = 0; i <= cellsPerRow; i += 1) {
+//         ctx.moveTo(ctx.lineWidth/2 + i * cellSize , 0);
+//         ctx.lineTo(ctx.lineWidth/2 + i * cellSize , canvas.height) 
+//     }
+//         // rivit
+//     for (let i = 0; i <= cellsPerRow; i += 1) {
+//         ctx.moveTo(0,ctx.lineWidth/2 + i * cellSize) // rivi vase
+//         ctx.lineTo(canvas.height, ctx.lineWidth/2 + i * cellSize ) // rivi oikea
+//     }
+//     ctx.strokeStyle = cellColorsLight.GRID
+//     ctx.stroke()
+//     //drawMap()
+// }
+
+export const drawMap = () => {
     ctx.canvas.height = Math.min(window.innerWidth - 15, window.innerHeight - 15)
     ctx.canvas.width = canvas.height
     ctx.lineWidth = lineWidth
-    cellSize = (canvas.height / cellsPerRow) - ctx.lineWidth / cellsPerRow
-
-    // sarakkeet
-    for (let i = 0; i <= cellsPerRow; i += 1) {
-        ctx.moveTo(ctx.lineWidth/2 + i * cellSize , 0);
-        ctx.lineTo(ctx.lineWidth/2 + i * cellSize , canvas.height) 
+    if (isGrid) {
+        cellSize = (canvas.height / cellsPerRow) - ctx.lineWidth / cellsPerRow
+    } else {
+        cellSize = (canvas.height / cellsPerRow)
     }
-        // rivit
-    for (let i = 0; i <= cellsPerRow; i += 1) {
-        ctx.moveTo(0,ctx.lineWidth/2 + i * cellSize) // rivi vase
-        ctx.lineTo(canvas.height, ctx.lineWidth/2 + i * cellSize ) // rivi oikea
-    }
-    ctx.strokeStyle = cellColors.GRID
-    ctx.stroke()
-    //drawMap()
-}
-
-export const drawMap = () => {
+    
     // Maalataan kartta
     for (let row = 0; row < map.length; row++) {
         for (let column = 0; column < map.length; column++) {
@@ -65,20 +74,30 @@ export const drawMap = () => {
 
 export const drawCell = (pos) => {
     // Piirrä yksittäinen solu
-    if (map[pos.y][pos.x] == NodeValues.EMPTY) {
-        ctx.fillStyle = cellColors.EMPTY
-    } else if (map[pos.y][pos.x] == NodeValues.BLOCKED) {
-        ctx.fillStyle = cellColors.BLOCKED
-    } else if (map[pos.y][pos.x] == NodeValues.START) {
-        ctx.fillStyle = cellColors.START
-    } else if (map[pos.y][pos.x] == NodeValues.END) {
-        ctx.fillStyle = cellColors.END
-    } else if (map[pos.y][pos.x] == NodeValues.VISITED) {
-        ctx.fillStyle = cellColors.VISITED
-    } else if (map[pos.y][pos.x] == NodeValues.ROUTE) {
-        ctx.fillStyle = cellColors.ROUTE
+    let colors  = cellColorsLight
+    if (!isLight) {
+        colors = cellColorsDark
     }
-    ctx.fillRect(pos.x * cellSize + lineWidth, pos.y * cellSize + lineWidth, cellSize - lineWidth, cellSize- lineWidth)
+    if (map[pos.y][pos.x] == NodeValues.EMPTY) {
+        ctx.fillStyle = colors.EMPTY
+    } else if (map[pos.y][pos.x] == NodeValues.BLOCKED) {
+        ctx.fillStyle = colors.BLOCKED
+    } else if (map[pos.y][pos.x] == NodeValues.START) {
+        ctx.fillStyle = colors.START
+    } else if (map[pos.y][pos.x] == NodeValues.END) {
+        ctx.fillStyle = colors.END
+    } else if (map[pos.y][pos.x] == NodeValues.VISITED) {
+        ctx.fillStyle = colors.VISITED
+    } else if (map[pos.y][pos.x] == NodeValues.ROUTE) {
+        ctx.fillStyle = colors.ROUTE
+    }
+
+    if (isGrid) {
+        ctx.fillRect(pos.x * cellSize + lineWidth, pos.y * cellSize + lineWidth, cellSize - lineWidth, cellSize- lineWidth)
+    } else {
+        ctx.fillRect(pos.x * cellSize, pos.y * cellSize, cellSize + 1, cellSize + 1)
+    }
+    
 }
 
 export const getMousePosCanvas = ( event) => {
@@ -118,7 +137,6 @@ export const cursorCanvas = () => {
         mouseDown.length = 0
         previousMousePosGrid = {x: null, y: null}
         painting = null
-        drawGrid()
         drawMap()
     })
 
@@ -177,6 +195,5 @@ const placeStartEnd = (event, location) => {
 
 window.onresize = () => {
     // Piirretään uudestaan aina kun ikkunan koko muuttuu
-    drawGrid()
     drawMap()
 }

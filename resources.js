@@ -1,18 +1,28 @@
 const NodeValues = {
     EMPTY: "0",
-    BLOCKED: "X",
-    VISITED: "V",
-    START: "S",
-    END: "E",
-    ROUTE: "R"
+    BLOCKED: "1",
+    VISITED: "2",
+    START: "3",
+    END: "4",
+    ROUTE: "5"
 }
 
-export const cellColors = {
-    EMPTY: 'rgb(69,146,64)',
-    BLOCKED: 'rgb(11, 11, 11)',
-    VISITED: 'white',
+export const cellColorsLight = {
+    EMPTY: 'rgb(220, 220, 220)',
+    BLOCKED: 'rgb(77, 77, 77)',
+    VISITED: 'rgb(0,153,153)',
     START: 'blue',
-    END: 'pink',
+    END: 'red',
+    ROUTE: 'yellow',
+    GRID: 'rgb(32, 32, 32)',
+}
+
+export const cellColorsDark = {
+    EMPTY: 'rgb(150, 150, 150)',
+    BLOCKED: 'rgb(0, 0, 0)',
+    VISITED: 'rgb(0,153,153)',
+    START: 'blue',
+    END: 'red',
     ROUTE: 'yellow',
     GRID: 'rgb(32, 32, 32)',
 }
@@ -61,6 +71,17 @@ export let animDelay = 0
 
 export const setAnimationDelay = (time) => {
     animDelay = time
+}
+
+export let isGrid = true
+
+export const setGrid = () => {
+    isGrid = !isGrid
+}
+
+export let isLight = true
+export const changeLightMode = () => {
+    isLight = !isLight
 }
 
 export const map = []

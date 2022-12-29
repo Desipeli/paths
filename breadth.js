@@ -1,6 +1,6 @@
 import NodeValues from "./resources.js"
 import { map, replaceCellsWith, delay, animDelay} from "./resources.js"
-import { drawCell, drawGrid, drawMap } from "./canvas.js"
+import { drawCell, drawMap } from "./canvas.js"
 import HeapQ from "./heapq.js"
 
 
@@ -84,7 +84,6 @@ const setDistances = () => {
 
 const showShortestPath = (path) => {
     replaceCellsWith(NodeValues.VISITED, NodeValues.EMPTY)
-    drawGrid()
     drawMap()
     for (let i = 0; i < path.length; i++) {
         map[path[i].y][path[i].x] = NodeValues.ROUTE
