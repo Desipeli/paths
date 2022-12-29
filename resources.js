@@ -20,7 +20,7 @@ export const cellColorsLight = {
 export const cellColorsDark = {
     EMPTY: 'rgb(150, 150, 150)',
     BLOCKED: 'rgb(0, 0, 0)',
-    VISITED: 'rgb(0,153,153)',
+    VISITED: 'rgb(0,220,220)',
     START: 'blue',
     END: 'red',
     ROUTE: 'yellow',
