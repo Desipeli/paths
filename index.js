@@ -1,5 +1,5 @@
 import NodeValues, { canvas, map, setAnimationDelay, findNode} from "./resources.js"
-import { initGrid, cursorCanvas,  } from "./canvas.js"
+import { initGrid, cursorCanvas, drawGrid, drawMap, drawCell,  } from "./canvas.js"
 import initKDMaze from "./koreDessuMaze.js" // Does this update??
 import initBreadth from "./breadth.js"
 
@@ -18,24 +18,43 @@ const listeners = () => {
     const input = document.getElementById('grid-size')
     btnNewGrid.addEventListener('click', () => {
         const value = Math.max(Math.min(300, input.value), 1)
-        let answer = confirm(`Do you want to create new ${value} x ${value} grid? Current will be deleted`)
-        if (answer) {
+        // let answer = confirm(`Do you want to create new ${value} x ${value} grid? Current will be deleted`)
+        // if (answer) {
             initGrid(value)
-        }
+        // }
     })
 
     const btnBreadth = document.getElementById('btn-breadth')
     btnBreadth.addEventListener('click', () => {
         let startPos = findNode(NodeValues.START)
         if (!startPos) {
-            alert("Place starting position (blue) with right click")
-            return
+            // Find first empty node
+            for (let row = 0; row < map.length; row++) {
+                for (let col = 0; col < map.length; col++) {
+                    if (map[row][col] == NodeValues.EMPTY) {
+                        map[row][col] = NodeValues.START
+                        startPos = {y: row, x: col}
+                        break
+                    }
+                }
+                if (startPos) break
+            }
         }
         let endPos = findNode(NodeValues.END)
         if (!endPos) {
-            alert("Place destination (pink) with right click")
-            return
+            for (let row = map.length -1; row >= 0; row--) {
+                for (let col = map.length -1; col >= 0; col--) {
+                    if (map[row][col] == NodeValues.EMPTY) {
+                        map[row][col] = NodeValues.END
+                        endPos = {y: row, x: col}
+                        break
+                    }
+                } 
+                if (endPos) break
+            }
         }
+        drawCell(startPos)
+        drawCell(endPos)
         initBreadth(startPos, endPos)
     })
 
@@ -48,13 +67,13 @@ const listeners = () => {
         if (map.length % 2 == 0) {
             value += 1
         }
-        let answer = confirm(`Do you want to create new ${value} x ${value} maze? Current map will be deleted`)
-        if (answer) {
+        // let answer = confirm(`Do you want to create new ${value} x ${value} maze? Current map will be deleted`)
+        // if (answer) {
             console.log(isCycles.checked)
             
             initGrid(value)
             initKDMaze(isCycles.checked, Math.max(Math.min(100, probability.value), 0) / 100, startPos)
-        }
+        // }
     })
 
     const animationDelayInput = document.getElementById('animation-delay')
