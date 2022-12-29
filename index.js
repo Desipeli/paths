@@ -1,4 +1,4 @@
-import NodeValues, { canvas, map, setAnimationDelay, findNode, changeLightMode} from "./resources.js"
+import NodeValues, { canvas, map, setAnimationDelay, findNode, changeLightMode, isLight} from "./resources.js"
 import { initGrid, cursorCanvas, drawCell, drawMap,  } from "./canvas.js"
 import initKDMaze from "./koreDessuMaze.js" // Does this update??
 import initBreadth from "./breadth.js"
@@ -17,6 +17,8 @@ const listeners = () => {
 
     const btnLightMode = document.getElementById('btn-light')
     btnLightMode.addEventListener('click', () => {
+        if (isLight) btnLightMode.textContent = "Light"
+        else btnLightMode.textContent = "Dark"
         changeLightMode()
         drawMap()
     })
