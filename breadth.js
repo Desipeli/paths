@@ -4,7 +4,7 @@ import { drawCell, drawGrid, drawMap } from "./canvas.js"
 import HeapQ from "./heapq.js"
 
 
-const initBreadth = async (startPos, endPos) => {
+const initBreadth = async (startPos, endPos, showEveryStep = false) => {
     const condition = (bigger, smaller) => (bigger.dist > smaller.dist)
     const queue = new HeapQ(condition)
     const visited = {}
@@ -15,29 +15,46 @@ const initBreadth = async (startPos, endPos) => {
     const distances = setDistances()
     distances[startPos.y][startPos.x] = 0
     const previous = {}
+
+    const startTime = performance.now()
     await breadth(queue, visited, adjList, distances, previous)
-    const path = getShortestPath(previous, startPos, endPos)
+    console.log(`Pathfinding took ${performance.now() - startTime} ms`)
+    const path = getShortestPath(previous, startPos, endPos, showEveryStep)
     showShortestPath(path)
 }
 
-const breadth = async (queue, visited, adjList, distances, previous) => {
+const breadth = async (queue, visited, adjList, distances, previous, showEveryStep) => {
     let safety = 0
     let endFound = false
+    let previousDistance = 1
     
     while (!queue.isEmpty()) {
-        const newNode = queue.pop()
-        if ([newNode.y, newNode.x] in visited) continue
-        visited[[newNode.y, newNode.x]] = true
+        const node = queue.pop()
 
-        if (map[newNode.y][newNode.x] == NodeValues.EMPTY) {
-            map[newNode.y][newNode.x] = NodeValues.VISITED
+        // Animation
+        if (animDelay > 0) {
+            if (showEveryStep) await delay(animDelay)
+            else {
+                console.log(showEveryStep)
+                if (previousDistance < distances[node.y][node.x]) {
+                    await delay(animDelay)
+                    previousDistance = distances[node.y][node.x]
+                }
+            }
+        } // animation end
+
+        if ([node.y, node.x] in visited) continue
+        visited[[node.y, node.x]] = true
+
+        if (map[node.y][node.x] == NodeValues.EMPTY) {
+            map[node.y][node.x] = NodeValues.VISITED
         }
         
-        drawCell({x: newNode.x, y: newNode.y})
-        adjList[[newNode.y, newNode.x]].forEach(edge => {
-            const newDist = distances[newNode.y][newNode.x] + 1
+        drawCell({x: node.x, y: node.y})
+        adjList[[node.y, node.x]].forEach(edge => {
+            const newDist = distances[node.y][node.x] + 1
             if (newDist < distances[edge.y][edge.x]) {
-                previous[[edge.y, edge.x]] = newNode
+                previous[[edge.y, edge.x]] = node
                 distances[edge.y][edge.x] = newDist
                 if (map[edge.y][edge.x] == NodeValues.END) {
                     endFound = true
@@ -45,7 +62,9 @@ const breadth = async (queue, visited, adjList, distances, previous) => {
                 queue.push({dist: newDist, x: edge.x, y: edge.y})
             }
         })
-        if (animDelay > 0) await delay(animDelay)
+        
+
+        
         if (endFound) break
         if (safety >= 100000) return
         safety++
@@ -69,7 +88,6 @@ const showShortestPath = (path) => {
     drawMap()
     for (let i = 0; i < path.length; i++) {
         map[path[i].y][path[i].x] = NodeValues.ROUTE
-        console.log(path[i].x, path[i].y)
         drawCell({x: path[i].x, y: path[i].y})
     }
 }
