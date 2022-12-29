@@ -35,7 +35,6 @@ const breadth = async (queue, visited, adjList, distances, previous, showEverySt
         if (animDelay > 0) {
             if (showEveryStep) await delay(animDelay)
             else {
-                console.log(showEveryStep)
                 if (previousDistance < distances[node.y][node.x]) {
                     await delay(animDelay)
                     previousDistance = distances[node.y][node.x]
